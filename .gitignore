@@ -1,0 +1,53 @@
+# ROS2 Colcon Workspace
+**/build/
+**/install/
+**/log/
+
+**/Release/
+**/Debug/
+**/target/
+**/cmake-build-debug*/
+**/cmake-build-release*/
+
+# Eclipse language settings files
+**/language.settings.xml
+
+# Editor directories and files
+**/.metadata
+**/.idea
+**/.vscode
+**/.cache
+**/*.suo
+**/*.ntvs*
+**/*.njsproj
+**/*.sln
+**/*.sw?
+**/*.iml
+
+# backups
+**/*.bak
+
+# file locks
+**/.~lock*
+
+# thumbs.db
+**/Thumbs.db
+**/thumbs.db
+
+# mac files
+**/.DS_Store
+
+# log and temporary file
+**/*.log*
+**/*.*~
+**/*.aux
+**/*.fdb_latexmk
+**/*.fls
+**/*.out
+**/*.synctex.gz
+**/*.toc
+
+# local env files
+**/.env.local
+**/.env.*.local
+
