@@ -1,0 +1,130 @@
+# Copyright (c) 2026 Chair of Robotics (Computer Science XVII) @ Julius–Maximilians–University
+# 
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
+/**:
+  ros__parameters:
+    # host, path, and port of server instance to connect to
+    # if SSL = true, transport encryption will be applied
+    host: '127.0.0.1'
+    path: '/'
+    port: '9090'
+    ssl: false
+
+    # create a pre-defined ThreadedPublisher which publishes the ros-time over topic /clock
+    # this allows ROS2 time synchronization between the 'server' and 'client'
+    # this will only work, if the 'server' has the parameter clock/subscribe = true
+    clock/publish: true
+
+    # create a pre-define ThreadedPublisher which publishes tf2 transformations over topic /tf and /tf_static
+    # this will allow tf2 transformations forwarding from 'server' to 'client'
+    # this will only work, if the 'server' has the parameter tf/subscribe = true 
+    tf/publish: true
+
+    # enable / disable per-message fragmentation during websocket transport
+    # using the given fragmentation size if enabled
+    fragmentation/enable: false
+    fragmentation/size: 4096
+
+    # the maximum size of a message which is accepted to receive
+    # 16 * 1024B * 1024B
+    max_message_size: 16777216
+
+    # unique and user-specific user key for authentication
+    user_key: ''
+
+    # quality of service definitions
+    # the policies history, depth, reliability and durability are mandatory
+    # the policies deadline, lifespan, liveliness and liveliness_lease_duration are optional and set to default if missing
+    #
+    # id:                        unique id ... to be used for subscriber, publisher, service & action server & clients ... range from 0 to 255
+    #
+    # history:                   RMW_QOS_POLICY_HISTORY_SYSTEM_DEFAULT, RMW_QOS_POLICY_HISTORY_KEEP_LAST, RMW_QOS_POLICY_HISTORY_KEEP_ALL
+    # depth:                     * a positive integer *
+    # reliability:               RMW_QOS_POLICY_RELIABILITY_SYSTEM_DEFAULT, RMW_QOS_POLICY_RELIABILITY_RELIABLE, RMW_QOS_POLICY_RELIABILITY_BEST_EFFORT
+    # durability:                RMW_QOS_POLICY_DURABILITY_SYSTEM_DEFAULT, RMW_QOS_POLICY_DURABILITY_TRANSIENT_LOCAL, RMW_QOS_POLICY_DURABILITY_VOLATILE
+    #
+    # deadline:                  RMW_QOS_DEADLINE_DEFAULT, RMW_QOS_DEADLINE_BEST_AVAILABLE, *{seconds, nanoseconds}* e.g. *{123, 456000000}*
+    # lifespan:                  RMW_QOS_LIFESPAN_DEFAULT, *{seconds, nanoseconds}* e.g. *{123, 456000000}*
+    # liveliness:                RMW_QOS_POLICY_LIVELINESS_SYSTEM_DEFAULT, RMW_QOS_POLICY_LIVELINESS_AUTOMATIC, RMW_QOS_POLICY_LIVELINESS_MANUAL_BY_TOPIC, RMW_QOS_POLICY_LIVELINESS_BEST_AVAILABLE
+    # liveliness_lease_duration: RMW_QOS_LIVELINESS_LEASE_DURATION_DEFAULT, RMW_QOS_LIVELINESS_LEASE_DURATION_BEST_AVAILABLE, *{seconds, nanoseconds}* e.g. *{123, 456000000}*
+    #
+    # 1: default profile, 2: action-status profile, 3: sensors profile
+    qos:
+      - '{"id": 1, "history": "RMW_QOS_POLICY_HISTORY_KEEP_LAST", "depth": 10, "reliability": "RMW_QOS_POLICY_RELIABILITY_RELIABLE", "durability": "RMW_QOS_POLICY_DURABILITY_VOLATILE"}'
+      - '{"id": 2, "history": "RMW_QOS_POLICY_HISTORY_KEEP_LAST", "depth": 10, "reliability": "RMW_QOS_POLICY_RELIABILITY_RELIABLE", "durability": "RMW_QOS_POLICY_DURABILITY_TRANSIENT_LOCAL"}'
+      - '{"id": 3, "history": "RMW_QOS_POLICY_HISTORY_KEEP_LAST", "depth": 10, "reliability": "RMW_QOS_POLICY_RELIABILITY_BEST_EFFORT", "durability": "RMW_QOS_POLICY_DURABILITY_VOLATILE"}'
+
+    # compression profile definitions with default compression rate value
+    #
+    # id:          unique id ... to be used for subscriber, publisher, service & action server & clients ... range from 0 to 255
+    #
+    # NONE:        no compression
+    # LZ4_DEFAULT: very fast but low compression
+    # LZ4_HC:      faster than ZLIB for low compression rates, slower than ZLIB for high compression rates, always larger compressed size than ZLIB
+    # ZLIB:        lowest compressed size overall
+    #
+    # NONE:        rate is ignored
+    # LZ4_DEFAULT: rate is understood as accelerator, the bigger the faster ... range from 1 to LZ4_ACCELERATION_MAX (65537) .. default 1
+    # LZ4_HC:      rate is understood as rate, the bigger the slower ... range from 1 to LZ4HC_CLEVEL_MAX (12) ... default 9
+    # ZLIB:        rate is understood as rate, the bigger the slower ... range from 1 to Z_BEST_COMPRESSION (9) ... default 6
+    compression:
+      - '{"id": 1, "compressor": "NONE",        "rate": 0}'
+      - '{"id": 2, "compressor": "LZ4_DEFAULT", "rate": 1}'
+      - '{"id": 3, "compressor": "LZ4_HC",      "rate": 9}'
+      - '{"id": 4, "compressor": "ZLIB",        "rate": 6}'
+
+    # topics to which the 'client' subscribes locally
+    # these topics can be requested by the 'server'
+    #
+    # channel:      channel ... must be unique over all subscriber and publisher ... range from 0 to 248
+    # topic:        topic name
+    # type:         topic type definition
+    # useOwnThread: if true, an own processing thread plus executor thread is used
+    # permanent:    if true, subscriber won't be destroyed when other side stopped requesting for the data ... necessary for RMW_QOS_POLICY_DURABILITY_TRANSIENT_LOCAL
+    # qos:          id of the quality of service profile to apply
+    # compression:  id of the compression profile to apply ... needs useOwnThread = true
+    #
+    # subscriber: []
+
+    # topics which are published by the 'client' locally
+    # messages from these topics can be send by the 'server'
+    #
+    # channel:      channel ... must be unique over all subscriber and publisher ... range from 0 to 248
+    # topic:        topic name
+    # type:         topic type definition
+    # useOwnThread: if true, an own processing thread
+    # qos:          id of the quality of service profile to apply
+    # compression:  id of the compression profile to apply ... needs useOwnThread = true
+    #
+    # publisher: []
+
+    # service server which are run by the 'client'
+    # these service server mirror actual service server which are run on the 'server'
+    #
+    # channel:           channel ... must be unique over all service server & client ... range from 0 - 255
+    # type:              service server type as defined in plugins.xml (pluginlib)
+    # useOwnThread:      if true, an own executor thread is used
+    # allowSimultaneous: if simultaneous calls to the service server should be processed simultaneously or sequentially ... needs useOwnThread = true
+    # service-qos:       id of the quality of service profile to apply
+    # maxExecTime:       max execution in seconds time after which a call is interrupted and stopped
+    # compression:       id of the compression profile to apply (also possible for shared thread, but not recommended)
+    service/server:
+      - '{"channel": 0, "type": "connect_plugins::AddTwoIntsServiceServer", "service-qos": 1, "useOwnThread": false, "allowSimultaneous": false, "maxExecTime": 10, "compression": 1}'
+    
+    # action server which are run by the 'client'
+    # these action server mirror actual action server which are run on the 'server'
+    #
+    # channel:           channel ... must be unique over all action server & client ... range from 0 - 255
+    # type:              action server type as defined in plugins.xml (pluginlib)
+    # useOwnThread:      if true, an own executor thread is used
+    # allowSimultaneous: if simultaneous calls to the action server should be processed simultaneously or sequentially ... needs useOwnThread = true
+    # service-qos:       id of the quality of service profile to apply for goal handling
+    # feedback-qos:      id of the quality of service profile to apply for publishing feedback message
+    # status-qos:        id of the quality of service profile to apply for broadcasting goal statuses
+    # resultTimeout:     timeout in seconds after which the goal result will no longer be available; -1: indefinitely, 0: immediately
+    # compression:       id of the compression profile to apply (also possible for shared thread, but not recommended)
+    action/server:
+      - '{"channel": 0, "type": "connect_plugins::FibonacciActionServer", "service-qos": 1, "feedback-qos": 1, "status-qos": 2, "useOwnThread": false, "allowSimultaneous": false, "compression": 1, "resultTimeout": 10}'
