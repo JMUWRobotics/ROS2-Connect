@@ -969,6 +969,12 @@ class ConnectBase : public rclcpp::Node {
             return false;
         }
 
+        if (GlobalConfig::publishClock && GlobalConfig::subscribeClock) {
+            RCLCPP_FATAL(this->get_logger(), "Cannot publish and subscribe to clock topic at the same time");
+            rclcpp::shutdown(nullptr, "Cannot publish and subscribe to clock topic at the same time");
+            return false;
+        }
+
         // if "clock/publish" is true
         // we need to add a pre-defined publisher to publish the servers time on /clock
         if (GlobalConfig::publishClock) {
