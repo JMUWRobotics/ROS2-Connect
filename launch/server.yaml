@@ -93,7 +93,6 @@
     # type:         topic type definition
     # useOwnThread: if true, an own processing thread
     # qos:          id of the quality of service profile to apply
-    # compression:  id of the compression profile to apply ... needs useOwnThread = true
     #
     # publisher: []
 
