@@ -146,7 +146,7 @@ The following options are available:
 | ZLIB           | 1 - 9     | 6                              |                                                                                      |
 
 An exemplary Compression profile would therefore be:<br>
-`'{"id": 4, "compressor": "ZLIB",        "rate": 6}'`
+`'{"id": 4, "compressor": "ZLIB", "rate": 6}'`
 
 ### Services & Actions
 
