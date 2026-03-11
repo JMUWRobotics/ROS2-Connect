@@ -85,6 +85,7 @@ class ActionClient : public Action {
     ActionClient() = default;
 
     std::size_t expectedSize{0}; // holds the expected size of an incoming request
+    bool dynamicSize{false}; // if size of incoming request may be dynamic; expected size will be ignored
 
     /**
      * This should wait for the action (server) to call to become alive by
@@ -288,7 +289,7 @@ class ActionClient : public Action {
         }
 
         // check the size of the incoming request
-        if (const size_t size = message->getData().size(); size != this->expectedSize) {
+        if (const size_t size = message->getData().size(); !this->dynamicSize && (size != this->expectedSize)) {
             RCLCPP_WARN(this->logger.get(), "Received goal of unexpected size, expected %lu, got %lu, responding with reject", expectedSize, size);
             this->send(ServiceActionOpCode::ACTION_TO_SERVER_GOAL_REJECT, {}, handle->gID);
             handle->handlingGoal = false;

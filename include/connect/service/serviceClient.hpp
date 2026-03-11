@@ -101,6 +101,7 @@ namespace service {
 
         std::vector<uint8_t> error; // holds serialized data which represents an error
         std::size_t expectedSize{0}; // holds the expected size of an incoming request
+        bool dynamicSize{false}; // if size of incoming request may be dynamic; expected size will be ignored
 
         /**
          * This should "cancel" the ongoing request.
@@ -146,7 +147,7 @@ namespace service {
             }
 
             // check the size of the incoming request
-            if (const size_t size = message->getData().size(); size != this->expectedSize) {
+            if (const size_t size = message->getData().size(); !this->dynamicSize && (size != this->expectedSize)) {
                 RCLCPP_WARN(this->logger.get(), "Received request of unexpected size, expected %lu, got %lu, responding with error", expectedSize, size);
                 this->send(ServiceActionOpCode::SERVICE_TO_SERVER, this->error, message->getGID());
                 this->removeHandle(handle);

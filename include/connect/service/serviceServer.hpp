@@ -112,9 +112,10 @@ namespace service {
          * @param data the serialized data to send to the other side
          * @param requestHeader the request header of the Service Server's callback function call
          * @param expectedSize the expected size of the response
+         * @param dynamicSize if the response is allowed to be dynamic in size; expected size will be ignored
          * @returns a valid ServiceActionHandle holding the response or a nullptr
          */
-        std::shared_ptr<ServiceActionHandle> sendAndWait(const std::vector<uint8_t> &data, const std::shared_ptr<rmw_request_id_t> &requestHeader, const size_t &expectedSize) {
+        std::shared_ptr<ServiceActionHandle> sendAndWait(const std::vector<uint8_t> &data, const std::shared_ptr<rmw_request_id_t> &requestHeader, const size_t &expectedSize, const bool dynamicSize = false) {
             // if we are stopping we need to somehow handle the request anyway
             if (this->stopping) {
                 RCLCPP_WARN(this->logger.get(), "Stopped before sending the request while handling a local request");
@@ -176,7 +177,7 @@ namespace service {
             }
 
             // test if the size of the response matches the expected size
-            if (const size_t size = handle->goalResponse->getData().size(); size != expectedSize) {
+            if (const size_t size = handle->goalResponse->getData().size(); !dynamicSize && (size != expectedSize)) {
                 RCLCPP_WARN(this->logger.get(), "Unexpectedly received response of wrong size, expected %lu got %lu", expectedSize, size);
                 handle->handlingGoal = false;
                 this->removeHandle(handle);
