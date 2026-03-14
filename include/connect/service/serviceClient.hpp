@@ -128,6 +128,8 @@ namespace service {
          *  - crafting a std::shared_ptr<...::Request> holding the deserialized message data
          *  - call async_send_request on the rclcpp::Client<...>::SharedPtr
          *  - and return the requestId
+         *
+         * @throws this can throw a std::exception if the message data cannot be deserialized
          */
         virtual int64_t asyncSendRequest(const std::unique_ptr<ServiceActionMessage> &message, std::shared_ptr<ServiceActionHandle> handle) = 0;
 
@@ -172,7 +174,15 @@ namespace service {
 
             // now async send the request
             // store the requestId which can be used to cancel this request
-            const int64_t requestId = this->asyncSendRequest(message, handle);
+            int64_t requestId;
+            try {
+                requestId = this->asyncSendRequest(message, handle);
+            } catch(std::exception &) {
+                RCLCPP_WARN(this->logger.get(), "Received request holding invalid data, responding with error");
+                this->send(ServiceActionOpCode::SERVICE_TO_SERVER, this->error, message->getGID());
+                this->removeHandle(handle);
+                return;
+            }
 
             // now acquire a unique lock
             std::unique_lock<std::mutex> lock(handle->waitMutex);
