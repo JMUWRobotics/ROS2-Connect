@@ -123,9 +123,19 @@ add_executable(
         src/connectServer.cpp
 )
 target_include_directories(server PRIVATE ${Boost_INCLUDE_DIRS} src include)
-target_link_libraries(server ${cpp_typesupport_target} Threads::Threads Boost::system Boost::json OpenSSL::SSL ZLIB::ZLIB PkgConfig::lz4)
+target_link_libraries(server PUBLIC
+        ${cpp_typesupport_target}
+        Threads::Threads
+        Boost::system
+        Boost::json
+        OpenSSL::SSL
+        ZLIB::ZLIB
+        PkgConfig::lz4
+        pluginlib::pluginlib
+        rclcpp::rclcpp
+        rclcpp_action::rclcpp_action
+)
 target_compile_definitions(server PUBLIC PACKAGE_NAME="${PROJECT_NAME}")
-ament_target_dependencies(server rclcpp rclcpp_action pluginlib)
 
 add_executable(
         client
@@ -182,9 +192,19 @@ add_executable(
         src/connectClient.cpp
 )
 target_include_directories(client PRIVATE ${Boost_INCLUDE_DIRS} src include)
-target_link_libraries(client ${cpp_typesupport_target} Threads::Threads Boost::system Boost::json OpenSSL::SSL ZLIB::ZLIB PkgConfig::lz4)
+target_link_libraries(client PUBLIC
+        ${cpp_typesupport_target}
+        Threads::Threads
+        Boost::system
+        Boost::json
+        OpenSSL::SSL
+        ZLIB::ZLIB
+        PkgConfig::lz4
+        pluginlib::pluginlib
+        rclcpp::rclcpp
+        rclcpp_action::rclcpp_action
+)
 target_compile_definitions(client PUBLIC PACKAGE_NAME="${PROJECT_NAME}")
-ament_target_dependencies(client rclcpp rclcpp_action pluginlib)
 
 # install node targets
 install(TARGETS
