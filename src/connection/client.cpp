@@ -67,7 +67,7 @@ bool Client::connect() {
         // let the stream verify the ssl certificates of the host using rfc2818 verification
         boost::asio::ssl::stream<boost::asio::ip::tcp::socket> ssl{std::move(sock), ctx};
         ssl.set_verify_mode(boost::asio::ssl::verify_peer);
-        ssl.set_verify_callback(boost::asio::ssl::rfc2818_verification(GlobalConfig::host));
+        ssl.set_verify_callback(boost::asio::ssl::host_name_verification(GlobalConfig::host));
 
         // set the SNI Hostname extension
         if (!SSL_set_tlsext_host_name(ssl.native_handle(), GlobalConfig::host.c_str())) {

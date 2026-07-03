@@ -12,7 +12,7 @@ RclMessage::RclMessage(const uint8_t channel, const Compressor compressor, const
 std::unique_ptr<RclMessage> RclMessage::fromFlatBuffer(const boost::beast::flat_buffer &flatBuffer) {
     // extract a pointer to the underlying data of the flatbuffer
     const boost::beast::flat_buffer::const_buffers_type readableData = flatBuffer.data();
-    const uint8_t *dataPtr = static_cast<const uint8_t *>(boost::asio::buffer_cast<const void *>(readableData));
+    const uint8_t *dataPtr = static_cast<const uint8_t *>(readableData.data());
 
     // extract the channel as the first byte
     // extract the compressor as the second byte

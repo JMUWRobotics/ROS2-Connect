@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.28)
 project(connect)
 
 # as soon as we reach cmake version 3.30 we should change this to NEW
@@ -28,7 +28,7 @@ find_package(std_msgs)
 find_package(rosidl_default_generators REQUIRED)
 
 find_package(Threads REQUIRED)
-find_package(Boost 1.75 REQUIRED COMPONENTS system json)
+find_package(Boost 1.75 REQUIRED COMPONENTS json)
 find_package(OpenSSL REQUIRED)
 
 find_package(PkgConfig REQUIRED)
@@ -126,7 +126,6 @@ target_include_directories(server PRIVATE ${Boost_INCLUDE_DIRS} src include)
 target_link_libraries(server PUBLIC
         ${cpp_typesupport_target}
         Threads::Threads
-        Boost::system
         Boost::json
         OpenSSL::SSL
         ZLIB::ZLIB
@@ -195,7 +194,6 @@ target_include_directories(client PRIVATE ${Boost_INCLUDE_DIRS} src include)
 target_link_libraries(client PUBLIC
         ${cpp_typesupport_target}
         Threads::Threads
-        Boost::system
         Boost::json
         OpenSSL::SSL
         ZLIB::ZLIB
