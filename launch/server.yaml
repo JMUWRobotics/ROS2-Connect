@@ -44,6 +44,9 @@
     # 16 * 1024B * 1024B
     max_message_size: 16777216
 
+    # if ConnectStatus.msg should be published regularly (only available for server)
+    publish_status: true
+
     # quality of service definitions
     # the policies history, depth, reliability and durability are mandatory
     # the policies deadline, lifespan, liveliness and liveliness_lease_duration are optional and set to default if missing

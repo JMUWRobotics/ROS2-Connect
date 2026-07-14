@@ -1,5 +1,5 @@
 // Copyright (c) 2026 Chair of Robotics (Computer Science XVII) @ Julius–Maximilians–University
-// 
+//
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -34,14 +34,16 @@ class ConnectServer final : public ConnectBase {
                 rclcpp::shutdown(nullptr, "Websocket server thread could not be started");
             }
             // start the connect status publisher
-            std::function<void()> callback = [this]() {
-                if (this->webSocketConnection != nullptr) {
-                    this->statusPublisher->publishStatus(this->webSocketConnection->getConnectionManager().isClientConnected());
-                } else {
-                    this->statusPublisher->publishStatus(false);
-                }
-            };
-            this->statusPublisher = std::make_unique<StatusPublisher>(this->shared_from_this(), std::move(callback));
+            if (GlobalConfig::publishStatus) {
+                std::function<void()> callback = [this]() {
+                    if (this->webSocketConnection != nullptr) {
+                        this->statusPublisher->publishStatus(this->webSocketConnection->getConnectionManager().isClientConnected());
+                    } else {
+                        this->statusPublisher->publishStatus(false);
+                    }
+                };
+                this->statusPublisher = std::make_unique<StatusPublisher>(this->shared_from_this(), std::move(callback));
+            }
         } catch (std::exception &e) {
             RCLCPP_FATAL(this->get_logger(), "Unable to create websocket server, error was: %s", e.what());
             rclcpp::shutdown(nullptr, "Unable to create websocket server");

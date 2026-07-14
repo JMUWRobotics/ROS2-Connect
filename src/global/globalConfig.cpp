@@ -30,6 +30,8 @@ size_t GlobalConfig::fragmentationSize = 4096; // default value according to boo
 
 size_t GlobalConfig::maxMessageSize = 16 * 1024 * 1024; // default value according to boost beast documentation
 
+bool GlobalConfig::publishStatus = false;
+
 std::string GlobalConfig::userKey = "";
 
 bool GlobalConfig::subscribeClock = false;

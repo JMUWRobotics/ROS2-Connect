@@ -158,6 +158,8 @@ class ConnectBase : public rclcpp::Node {
 
         this->declare_parameter<int>("max_message_size", 16 * 1024 * 1024);  // default value according to boost beast documentation
 
+        this->declare_parameter<bool>("publish_status", false);
+
         this->declare_parameter<std::string>("user_key", "");
 
         this->declare_parameter<bool>("clock/subscribe", false);  // creates a ClockSubscriber
@@ -195,6 +197,8 @@ class ConnectBase : public rclcpp::Node {
         this->get_parameter("fragmentation/size", GlobalConfig::fragmentationSize);
 
         this->get_parameter("max_message_size", GlobalConfig::maxMessageSize);
+
+        this->get_parameter("publish_status", GlobalConfig::publishStatus);
 
         this->get_parameter("user_key", GlobalConfig::userKey);
 

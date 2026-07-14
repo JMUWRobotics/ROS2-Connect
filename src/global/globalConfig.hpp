@@ -47,6 +47,8 @@ class GlobalConfig {
 
     static size_t maxMessageSize;
 
+    static bool publishStatus;
+
     static std::string userKey;
 
     static bool subscribeClock;
